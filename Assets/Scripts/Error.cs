@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine;
@@ -19,16 +20,21 @@ public class Error : MonoBehaviour
         if (!gameObject.activeSelf) return;
 
         // errorText 和 errorMessageText 透明度闪烁 
-        var alpha = 0.8f + Mathf.PingPong(Time.time * 0.3f, 0.2f);
+        var alpha = 0.5f + Mathf.PingPong(Time.time * 0.5f, 0.5f);
         errorText.color = new Color(errorText.color.r, errorText.color.g, errorText.color.b, alpha);
         errorMessageText.color = new Color(errorMessageText.color.r, errorMessageText.color.g, errorMessageText.color.b, alpha);
     }
 
-    public void SetError(string errorId, string errorMsg)
+    public void SetError(string errorId, string errorMsg="")
     {
-        // 0x0009629C: ERROR_0022 "ゲームプログラムが見つかりません"
-        // 0x000962CE: ERROR_0022"インストールメディア（DVD など）を使用してゲームプログラムを再度インストールしてください。" 
-        errorText.text = errorId;
-        errorMessageText.text = errorMsg;
+        errorText.text = errorId.Replace("_", " ");
+        if (!string.IsNullOrWhiteSpace(errorMsg))
+        {
+            errorMessageText.text = errorMsg;
+            return;
+        }
+        var message = Config.InitConfig.i18n.GetValueOrDefault($"{errorId}_MESSAGE","");
+        var workaround = Config.InitConfig.i18n.GetValueOrDefault($"{errorId}_WORKAROUND","");
+        errorMessageText.text = $"{message}\n{workaround}";
     }
 }

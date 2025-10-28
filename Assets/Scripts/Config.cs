@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using Newtonsoft.Json;
 
 public class InitConfig
 {
@@ -12,30 +13,27 @@ public class InitConfig
     {
         new Step()
         {
-            name = "STEP1",
-            describe = "起動しています",
+            name = "STEP_01",
             awaitTime = 5
         },
         new Step()
         {
-            name = "STEP4",
-            describe = "ネットワークの設定をしています",
+            name = "STEP_04",
             awaitTime = 3
         },
         new Step()
         {
-            name = "STEP10",
-            describe = "インストールメディアを接続してください",
+            name = "STEP_10",
             awaitTime = 0.5f
         },
         new Step()
         {
-            name = "STEP30",
-            describe = "まもなくゲームプログラムが起動します",
+            name = "STEP_30",
             awaitTime = -1,
             isBootGame = true
         }
     };
+    public Dictionary<string, string> i18n { get; set; } = new Dictionary<string, string>();
 }
 
 public class Step
@@ -51,10 +49,11 @@ public class Config
     public static InitConfig GetConfig()
     {
         var filePath = Path.Combine(Environment.CurrentDirectory, "init_config.json");
+        Debug.Log(filePath);
         if (!File.Exists(filePath))
         {
             var cfg = new InitConfig();
-            File.WriteAllText(filePath, JsonUtility.ToJson(cfg, true));
+            File.WriteAllText(filePath, JsonConvert.SerializeObject(cfg, Formatting.Indented));
             return cfg;
         }
         
@@ -63,19 +62,20 @@ public class Config
         if (string.IsNullOrWhiteSpace(json))
         {
             var cfg = new InitConfig();
-            File.WriteAllText(filePath, JsonUtility.ToJson(cfg, true));
+            File.WriteAllText(filePath, JsonConvert.SerializeObject(cfg, Formatting.Indented));
             return cfg;
         }
         
         try 
         {
-            return JsonUtility.FromJson<InitConfig>(json);
+            return JsonConvert.DeserializeObject<InitConfig>(json);
         }
-        catch (ArgumentException)
+        catch (Exception ex)
         {
             // 如果JSON解析失败，创建一个新的配置文件
+            Debug.LogException(ex);
             var cfg = new InitConfig();
-            File.WriteAllText(filePath, JsonUtility.ToJson(cfg, true));
+            File.WriteAllText(filePath, JsonConvert.SerializeObject(cfg, Formatting.Indented));
             return cfg;
         }
     }

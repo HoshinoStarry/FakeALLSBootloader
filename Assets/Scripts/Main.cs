@@ -9,6 +9,7 @@ public class Main : MonoBehaviour
     {
         var cfg = Config.InitConfig;
         modelText.text = string.IsNullOrWhiteSpace(cfg.modelName) ? "ALLS HX" : cfg.modelName;
+        
         var logoObj = GameObject.Find("Canvas/Main/LogoImage");
         if (logoObj is not null)
         {
@@ -24,8 +25,13 @@ public class Main : MonoBehaviour
                 imageComponent.sprite = sprite2;
             }
         }
-        if (Screen.width <= Screen.height) return;
+        if (Screen.width <= Screen.height)
+        {
+            Screen.SetResolution(1080, 1920, true);
+            return;
+        }
         
+        Screen.SetResolution(1920, 1080, true);
         transform.localPosition = new Vector3(0, 0f, 0f);
         Camera.main.backgroundColor = new Color(255, 255, 255);
     }
