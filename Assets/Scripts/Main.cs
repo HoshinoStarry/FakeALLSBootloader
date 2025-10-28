@@ -13,7 +13,6 @@ public class Main : MonoBehaviour
         var logoObj = GameObject.Find("Canvas/Main/LogoImage");
         if (logoObj is not null)
         {
-            Debug.Log("have logo");
             var logoPath = cfg.logoPath;
             var imageComponent = logoObj.GetComponent<Image>();
             if (imageComponent is not null && !string.IsNullOrWhiteSpace(logoPath))

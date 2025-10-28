@@ -23,13 +23,13 @@ public class InitConfig
         },
         new Step()
         {
-            name = "STEP_10",
+            name = "STEP_21",
             awaitTime = 0.5f
         },
         new Step()
         {
             name = "STEP_30",
-            awaitTime = -1,
+            awaitTime = 5f,
             isBootGame = true
         }
     };
@@ -49,7 +49,6 @@ public class Config
     public static InitConfig GetConfig()
     {
         var filePath = Path.Combine(Environment.CurrentDirectory, "init_config.json");
-        Debug.Log(filePath);
         if (!File.Exists(filePath))
         {
             var cfg = new InitConfig();

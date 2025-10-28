@@ -1,7 +1,7 @@
 {
   "modelName": "ALLS HX 2.1",
   "logoPath": "",
-  "batchFilePath": "",
+  "batchFilePath": "notepad",
   "steps": [
     {
       "name": "STEP_01",
@@ -24,7 +24,7 @@
     {
       "name": "STEP_30",
       "describe": "",
-      "awaitTime": -1.0,
+      "awaitTime": 3.0,
       "isBootGame": true
     }
   ],

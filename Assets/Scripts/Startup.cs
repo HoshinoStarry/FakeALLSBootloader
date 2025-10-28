@@ -14,8 +14,13 @@ public class Startup : MonoBehaviour
     
     public GameObject errorObj;
     
+    public GameObject mainObj;
+
+    [NonSerialized] private bool started = false;
+    
     public void Start()
     {
+        if (!gameObject.activeSelf) return;
         StartCoroutine(DisplayTextWithDelay());
     }
 	
@@ -43,12 +48,11 @@ public class Startup : MonoBehaviour
                 catch (Exception e)
                 {
                     Debug.LogException(e);
-                    
-                    gameObject.SetActive(false);
-                    var errorComponent = errorObj.GetComponent<Error>();
-                    errorComponent.SetError("ERROR_0022");
-                    errorObj.SetActive(true);
+                    GotoError("ERROR_0010");
+                    yield break;
                 }
+                yield return new WaitForSeconds(step.awaitTime);
+                QuitGame();
             }
             if (step.awaitTime > 0)
                 yield return new WaitForSeconds(step.awaitTime);
@@ -57,17 +61,31 @@ public class Startup : MonoBehaviour
 	
     public void StartGame(string batchFilePath)
     {
+        if (started) return;
         var startInfo = new System.Diagnostics.ProcessStartInfo(batchFilePath)
         {
-            UseShellExecute = true,
-            CreateNoWindow = false
+            UseShellExecute = false,
+            CreateNoWindow = true
         };
         var process = new System.Diagnostics.Process();
         process.StartInfo = startInfo;
         process.Start();
-        
-        // 最小化当前游戏窗口
-        // MinimizeWindow();
+        started = true;
+    }
+    
+    private void GotoError(string errorCode)
+    {
+        gameObject.SetActive(false);
+        var errorComponent = errorObj.GetComponent<Error>();
+        errorComponent.SetError(errorCode);
+        errorObj.SetActive(true);
+    }
+    
+    public void QuitGame()
+    {
+        Camera.main.backgroundColor = new Color(0, 0, 0);
+        mainObj.SetActive(false);
+        gameObject.SetActive(false);
         Application.Quit();
     }
     
