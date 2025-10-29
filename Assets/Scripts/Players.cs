@@ -40,7 +40,7 @@ public class Players : MonoBehaviour
             case DisplayType.Maimai:
             {
                 Screen.SetResolution(1080, 1920, true);
-                player1.transform.localPosition = new Vector3(0f, 420f, 0f);
+                player1.transform.localPosition = new Vector3(0f, -420f, 0f);
                 player1.SetActive(true);
                 break;
             }

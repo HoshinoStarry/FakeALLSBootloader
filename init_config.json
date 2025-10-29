@@ -3,7 +3,7 @@
   "logoPath": "",
   "batchFilePath": "notepad",
   "detectProcessName": "notepad.exe",
-  "displayType": 3,
+  "displayType": 2,
   "steps": [
     {
       "name": "STEP_01",

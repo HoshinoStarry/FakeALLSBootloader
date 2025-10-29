@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using Newtonsoft.Json;
 
@@ -61,9 +62,17 @@ public class Config
         var exePath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
         var exeDirectory = Path.GetDirectoryName(exePath);
         var filePath = Path.Combine(exeDirectory, "init_config.json");
+        
+        var commandLine = Environment.CommandLine;
+        var commandLineArgs = Environment.GetCommandLineArgs().ToList();
+        var cfgIndex = commandLineArgs.FindIndex(x => x.StartsWith("/config:") || x.StartsWith("--config:") || x.StartsWith("-c:") || x.StartsWith("/c:"));
+        if (cfgIndex >= 0)
+            filePath = commandLineArgs[cfgIndex].Split(':')[1];
+        
 #if UNITY_EDITOR
         filePath = @"D:\FakeALLSBoot\FakeALLSBootloader\init_config.json";
 #endif
+        
         if (!File.Exists(filePath))
         {
             var cfg = new InitConfig();
