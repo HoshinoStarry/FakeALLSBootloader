@@ -12,30 +12,7 @@ public class InitConfig
     public string batchFilePath { get; set; } = "";
     public string detectProcessName { get; set; } = "Sinmai.exe";
     public DisplayType displayType { get; set; } = DisplayType.Landscape;
-    public List<Step> steps { get; set; } = new List<Step>()
-    {
-        new Step()
-        {
-            name = "STEP_01",
-            awaitTime = 5
-        },
-        new Step()
-        {
-            name = "STEP_04",
-            awaitTime = 3
-        },
-        new Step()
-        {
-            name = "STEP_21",
-            awaitTime = 0.5f
-        },
-        new Step()
-        {
-            name = "STEP_30",
-            awaitTime = 5f,
-            isBootGame = true
-        }
-    };
+    public List<Step> steps { get; set; } = new List<Step>();
     public Dictionary<string, string> i18n { get; set; } = new Dictionary<string, string>();
 }
 
@@ -53,6 +30,8 @@ public class Step
     public string describe { get; set; } = "";
     public float awaitTime { get; set; } = 0;
     public bool isBootGame { get; set; } = false;
+
+    public override string ToString() => $"{name} - {describe} - {awaitTime}";
 }
 
 public class Config
@@ -72,10 +51,36 @@ public class Config
 #if UNITY_EDITOR
         filePath = @"D:\FakeALLSBoot\FakeALLSBootloader\init_config.json";
 #endif
-        
+        var cfg = new InitConfig
+        {
+            steps = new List<Step>()
+            {
+                new Step()
+                {
+                    name = "STEP_01",
+                    awaitTime = 5
+                },
+                new Step()
+                {
+                    name = "STEP_04",
+                    awaitTime = 3
+                },
+                new Step()
+                {
+                    name = "STEP_21",
+                    awaitTime = 0.5f
+                },
+                new Step()
+                {
+                    name = "STEP_30",
+                    awaitTime = 5f,
+                    isBootGame = true
+                }
+            }
+        };
+
         if (!File.Exists(filePath))
         {
-            var cfg = new InitConfig();
             File.WriteAllText(filePath, JsonConvert.SerializeObject(cfg, Formatting.Indented));
             return cfg;
         }
@@ -84,7 +89,6 @@ public class Config
         // 检查文件是否为空或只包含空白字符
         if (string.IsNullOrWhiteSpace(json))
         {
-            var cfg = new InitConfig();
             File.WriteAllText(filePath, JsonConvert.SerializeObject(cfg, Formatting.Indented));
             return cfg;
         }
@@ -97,7 +101,6 @@ public class Config
         {
             // 如果JSON解析失败，创建一个新的配置文件
             Debug.LogException(ex);
-            var cfg = new InitConfig();
             File.WriteAllText(filePath, JsonConvert.SerializeObject(cfg, Formatting.Indented));
             return cfg;
         }

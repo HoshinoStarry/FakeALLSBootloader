@@ -3,7 +3,7 @@
   "logoPath": "",
   "batchFilePath": "notepad",
   "detectProcessName": "notepad.exe",
-  "displayType": 2,
+  "displayType": 3,
   "steps": [
     {
       "name": "STEP_01",
@@ -20,7 +20,7 @@
     {
       "name": "STEP_21",
       "describe": "",
-      "awaitTime": 0.5,
+      "awaitTime": 10.0,
       "isBootGame": false
     },
     {
