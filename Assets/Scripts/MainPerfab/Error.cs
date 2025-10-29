@@ -1,25 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine;
 
 public class Error : MonoBehaviour
 {
     public Text errorText;
 
     public Text errorMessageText;
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
     void Update()
     {
-        // 检查当前对象是否被激活
         if (!gameObject.activeSelf) return;
 
-        // errorText 和 errorMessageText 透明度闪烁 
         var alpha = 0.5f + Mathf.PingPong(Time.time * 0.5f, 0.5f);
         errorText.color = new Color(errorText.color.r, errorText.color.g, errorText.color.b, alpha);
         errorMessageText.color = new Color(errorMessageText.color.r, errorMessageText.color.g, errorMessageText.color.b, alpha);

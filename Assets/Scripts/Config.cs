@@ -9,6 +9,8 @@ public class InitConfig
     public string modelName { get; set; } = "ALLS HX";
     public string logoPath { get; set; } = "";
     public string batchFilePath { get; set; } = "";
+    public string detectProcessName { get; set; } = "Sinmai.exe";
+    public DisplayType displayType { get; set; } = DisplayType.Landscape;
     public List<Step> steps { get; set; } = new List<Step>()
     {
         new Step()
@@ -36,6 +38,14 @@ public class InitConfig
     public Dictionary<string, string> i18n { get; set; } = new Dictionary<string, string>();
 }
 
+public enum DisplayType
+{
+    Landscape,
+    Portrait,
+    Maimai,
+    MaimaiDual,
+}
+
 public class Step
 {
     public string name { get; set; } = "";
@@ -48,7 +58,12 @@ public class Config
 { 
     public static InitConfig GetConfig()
     {
-        var filePath = Path.Combine(Environment.CurrentDirectory, "init_config.json");
+        var exePath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
+        var exeDirectory = Path.GetDirectoryName(exePath);
+        var filePath = Path.Combine(exeDirectory, "init_config.json");
+#if UNITY_EDITOR
+        filePath = @"D:\FakeALLSBoot\FakeALLSBootloader\init_config.json";
+#endif
         if (!File.Exists(filePath))
         {
             var cfg = new InitConfig();
